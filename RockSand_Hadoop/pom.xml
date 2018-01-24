@@ -5,7 +5,6 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>RockSand_Hadoop</groupId>
 	<artifactId>RockSand_Hadoop</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>RockSand_Hadoop</name>
 
 	<parent>
