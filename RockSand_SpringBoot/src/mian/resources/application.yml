@@ -3,3 +3,10 @@ server:
   port: 9090
   # 访问的基础路径
   context-path: /helloboot
+spring:
+  profiles:
+    active: dev
+  http:
+    encoding: 
+      charset: UTF-8
+      enabled: true
