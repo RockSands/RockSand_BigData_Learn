@@ -7,6 +7,9 @@ import org.springframework.stereotype.Component;
 /**
  * 通过读取properties,自动生成Bean
  * 路径:config/author.properties
+ * 
+ * 使用@Component ,则是正常使用资源文件
+ * 注释掉@Component ,则使用AuthorAutoConfiguration自动加载资源文件
  * @author Administrator
  *
  */

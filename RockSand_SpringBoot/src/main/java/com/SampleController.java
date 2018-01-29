@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.author.Author;
+import com.author.service.SayHi;
 
 /**
  * @RestController Rest接口的Controller
@@ -24,6 +25,9 @@ public class SampleController {
      */
     @Autowired
     private Author author;
+    
+    @Autowired
+    private SayHi sayHi;
 
     public static void main(String[] args) {
 	/**
@@ -43,6 +47,6 @@ public class SampleController {
 
     @RequestMapping("/")
     public String hello() {
-	return "Hello " + author.getName() + "!";
+	return "Hello" + author.getName() + "!\n" + sayHi.sayHi();
     }
 }
