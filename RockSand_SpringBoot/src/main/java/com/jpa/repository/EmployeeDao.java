@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.jpa.model.Employee;
 
@@ -52,7 +51,7 @@ public interface EmployeeDao extends JpaRepository<Employee, Long>, JpaSpecifica
 	 * @return
 	 */
 	@Modifying
-	@Transactional
+	//@Transactional
 	@Query(value = "UPDATE EMPLOYEES SET GENDER = :gender WHERE EMP_NO = :emp_no", nativeQuery = true)
 	public int updateEmployeeGender(@Param("gender") String gender, @Param("emp_no") String emp_no);
 }

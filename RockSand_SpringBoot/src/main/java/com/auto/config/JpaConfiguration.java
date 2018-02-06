@@ -1,7 +1,12 @@
 package com.auto.config;
 
+import javax.persistence.EntityManagerFactory;
+
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
 /**
  * JPA的配置文件
@@ -13,5 +18,4 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @Configuration
 @EnableJpaRepositories("com.jpa.repository")
 public class JpaConfiguration {
-
 }
