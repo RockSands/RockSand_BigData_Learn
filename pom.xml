@@ -28,7 +28,6 @@
 		</dependency>
 	</dependencies>
 	<modules>
-		<module>RockSand_SpringBoot</module>
 		<module>RockSand_Hadoop</module>
 		<module>RockSand_Storm</module>
 	</modules>

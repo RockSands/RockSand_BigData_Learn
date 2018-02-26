@@ -1,3 +1,0 @@
-# 自定义加载
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.auto.config.AuthorAutoConfiguration,\
