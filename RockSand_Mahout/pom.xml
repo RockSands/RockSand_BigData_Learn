@@ -1,0 +1,46 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>RockSand_BigData_Learn</groupId>
+		<artifactId>RockSand_BigData_Learn</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>RockSand_Mahout</artifactId>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<mahout.version>0.13.0</mahout.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.mahout</groupId>
+			<artifactId>mahout-math</artifactId>
+			<version>${mahout.version}</version>
+		</dependency>
+		<!-- <dependency> <groupId>org.apache.mahout</groupId> <artifactId>mahout-mr</artifactId> 
+			<version>${mahout.version}</version> <exclusions> <exclusion> <groupId>org.apache.mahout</groupId> 
+			<artifactId>mahout-hdfs</artifactId> </exclusion> <exclusion> <groupId>org.apache.hadoop</groupId> 
+			<artifactId>hadoop-client</artifactId> </exclusion> </exclusions> </dependency> -->
+		<dependency>
+			<groupId>org.apache.mahout</groupId>
+			<artifactId>mahout-examples</artifactId>
+			<version>${mahout.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.mahout</groupId>
+					<artifactId>mahout-hdfs</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.hadoop</groupId>
+					<artifactId>hadoop-client</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.hbase</groupId>
+					<artifactId>hbase-client</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+	</dependencies>
+</project>

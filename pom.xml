@@ -29,5 +29,6 @@
 	<modules>
 		<module>RockSand_Hadoop</module>
 		<module>RockSand_Storm</module>
+		<module>RockSand_Mahout</module>
 	</modules>
 </project>
