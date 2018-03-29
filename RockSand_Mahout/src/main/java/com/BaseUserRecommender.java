@@ -13,6 +13,11 @@ import org.apache.mahout.cf.taste.recommender.Recommender;
 import org.apache.mahout.cf.taste.similarity.UserSimilarity;
 import org.apache.mahout.cf.taste.similarity.precompute.example.GroupLensDataModel;
 
+/**
+ * 基于用户
+ * @author Administrator
+ *
+ */
 public class BaseUserRecommender {
     public static void main(String[] args) throws Exception {
 	// 准备数据 这里是电影评分数据

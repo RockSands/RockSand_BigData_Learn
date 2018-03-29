@@ -10,6 +10,11 @@ import org.apache.mahout.cf.taste.similarity.precompute.example.GroupLensDataMod
 import java.io.File;
 import java.util.List;
 
+/**
+ * 基于物品
+ * @author Administrator
+ *
+ */
 public class BaseItemRecommender {
     public static void main(String[] args) throws Exception {
         //准备数据 这里是电影评分数据
