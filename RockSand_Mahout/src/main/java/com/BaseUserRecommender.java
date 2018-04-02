@@ -3,6 +3,7 @@ package com;
 import java.io.File;
 import java.util.List;
 
+import org.apache.mahout.cf.taste.impl.model.file.FileDataModel;
 import org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood;
 import org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender;
 import org.apache.mahout.cf.taste.impl.similarity.PearsonCorrelationSimilarity;
@@ -11,7 +12,6 @@ import org.apache.mahout.cf.taste.neighborhood.UserNeighborhood;
 import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 import org.apache.mahout.cf.taste.recommender.Recommender;
 import org.apache.mahout.cf.taste.similarity.UserSimilarity;
-import org.apache.mahout.cf.taste.similarity.precompute.example.GroupLensDataModel;
 
 /**
  * 基于用户
@@ -23,7 +23,7 @@ public class BaseUserRecommender {
 	// 准备数据 这里是电影评分数据
 	File file = new File("D:\\ratings.dat");
 	// 将数据加载到内存中，GroupLensDataModel是针对开放电影评论数据的
-	DataModel dataModel = new GroupLensDataModel(file);
+	DataModel dataModel = new FileDataModel(file);
 	// 计算相似度，相似度算法有很多种，欧几里得、皮尔逊等等。
 	UserSimilarity similarity = new PearsonCorrelationSimilarity(dataModel);
 	// 计算最近邻域，邻居有两种算法，基于固定数量的邻居和基于相似度的邻居，这里使用基于固定数量的邻居

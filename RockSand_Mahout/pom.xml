@@ -7,40 +7,37 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>RockSand_Mahout</artifactId>
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<mahout.version>0.13.0</mahout.version>
-	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.mahout</groupId>
-			<artifactId>mahout-math</artifactId>
-			<version>${mahout.version}</version>
-		</dependency>
-		<!-- <dependency> <groupId>org.apache.mahout</groupId> <artifactId>mahout-mr</artifactId> 
-			<version>${mahout.version}</version> <exclusions> <exclusion> <groupId>org.apache.mahout</groupId> 
-			<artifactId>mahout-hdfs</artifactId> </exclusion> <exclusion> <groupId>org.apache.hadoop</groupId> 
-			<artifactId>hadoop-client</artifactId> </exclusion> </exclusions> </dependency> -->
-		<dependency>
-			<groupId>org.apache.mahout</groupId>
-			<artifactId>mahout-examples</artifactId>
-			<version>${mahout.version}</version>
+			<artifactId>mahout-integration</artifactId>
+			<version>${org.apache.mahout.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.apache.mahout</groupId>
 					<artifactId>mahout-hdfs</artifactId>
 				</exclusion>
 				<exclusion>
-					<groupId>org.apache.hadoop</groupId>
-					<artifactId>hadoop-client</artifactId>
-				</exclusion>
-				<exclusion>
 					<groupId>org.apache.hbase</groupId>
 					<artifactId>hbase-client</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>org.apache.hadoop</groupId>
+					<artifactId>hadoop-client</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
-
+		<!-- <dependency> <groupId>org.apache.mahout</groupId> <artifactId>mahout-examples</artifactId> 
+			<version>${org.apache.mahout.version}</version> <exclusions> <exclusion> 
+			<groupId>org.slf4j</groupId> <artifactId>slf4j-log4j12</artifactId> </exclusion> 
+			<exclusion> <groupId>org.apache.hadoop</groupId> <artifactId>hadoop-client</artifactId> 
+			</exclusion> <exclusion> <groupId>org.apache.mahout</groupId> <artifactId>mahout-hdfs</artifactId> 
+			</exclusion> <exclusion> <groupId>org.apache.hbase</groupId> <artifactId>hbase-client</artifactId> 
+			</exclusion> <exclusion> <groupId>log4j</groupId> <artifactId>log4j</artifactId> 
+			</exclusion> <exclusion> <groupId>commons-logging</groupId> <artifactId>commons-logging</artifactId> 
+			</exclusion> <exclusion> <groupId>org.slf4j</groupId> <artifactId>slf4j-api</artifactId> 
+			</exclusion> <exclusion> <groupId>org.apache.mahout</groupId> <artifactId>mahout-integration</artifactId> 
+			</exclusion> </exclusions> </dependency> -->
 	</dependencies>
 </project>
