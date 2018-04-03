@@ -8,6 +8,10 @@
 	</parent>
 	<artifactId>RockSand_Mahout</artifactId>
 
+	<properties>
+		<org.apache.mahout.version>0.13.0</org.apache.mahout.version>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.mahout</groupId>

@@ -31,5 +31,6 @@
 		<module>RockSand_Hadoop</module>
 		<module>RockSand_Storm</module>
 		<module>RockSand_Mahout</module>
+		<module>RockSand_LibRec</module>
 	</modules>
 </project>
