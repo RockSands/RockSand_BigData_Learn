@@ -2,6 +2,8 @@ package hadoop.definitive.guide.chapter000;
 
 import java.io.IOException;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.Text;
@@ -20,6 +22,15 @@ public class MaxTemperature {
 		if(args.length != 2){
 			System.err.println("参数数量不足!");
 			System.exit(-1);
+		}
+		/*
+		 * 删除之前的output,避免异常
+		 */
+		Configuration conf = new Configuration();
+		FileSystem fs = FileSystem.get(conf);
+		Path outpath = new Path("/output");
+		if(fs.exists(outpath)) {
+			fs.delete(outpath,false);
 		}
 		// 新建Job
 		Job job = Job.getInstance();
