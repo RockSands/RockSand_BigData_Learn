@@ -1,6 +1,7 @@
 package hadoop.definitive.guide.chapter000;
 
 import java.io.IOException;
+import java.net.URI;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -28,10 +29,14 @@ public class MaxTemperature {
 		 * 删除之前的output,避免异常
 		 */
 		Configuration conf = new Configuration();
-		FileSystem fs = FileSystem.get(conf);
+		FileSystem fs = FileSystem.get(URI.create("hdfs://192.168.80.151:9000"), conf);
 		// 删除output
 		Path outpath = new Path("/output");
-		fs.deleteOnExit(outpath);
+		System.out.println(fs.exists(outpath));
+		if(fs.exists(outpath)) {
+			fs.delete(outpath, true);
+		}
+		System.out.println(fs.exists(outpath));
 		// 删除tmp
 		Path tmppath = new Path("/tmp");
 		fs.deleteOnExit(tmppath);

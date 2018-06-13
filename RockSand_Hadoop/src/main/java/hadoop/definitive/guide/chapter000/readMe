@@ -9,5 +9,5 @@ hdfs dfs -chmod -R 777 /output
 hdfs dfs -chmod -R 777 /
 
 # 启动参数:
-hdfs://192.168.80.151:9000/gsod/
+hdfs://192.168.80.151:9000/gsod/2015/999999-96408-2015.op 
 hdfs://192.168.80.151:9000/output/
