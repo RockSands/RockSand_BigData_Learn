@@ -29,7 +29,9 @@ public class MaxTemperature {
 		 * 删除之前的output,避免异常
 		 */
 		Configuration conf = new Configuration();
-		FileSystem fs = FileSystem.get(URI.create("hdfs://192.168.80.151:9000"), conf);
+		FileSystem fs = FileSystem.get(URI.create("hdfs://192.168.80.152:8020"), conf);
+		// 新建Job
+		Job job = Job.getInstance(conf);
 		// 删除output
 		Path outpath = new Path("/output");
 		System.out.println(fs.exists(outpath));
@@ -40,12 +42,12 @@ public class MaxTemperature {
 		// 删除tmp
 		Path tmppath = new Path("/tmp");
 		fs.deleteOnExit(tmppath);
-		// 新建Job
-		Job job = Job.getInstance();
+	
 		// 任务为本身,Hadoop会将任务打包成Jar
 		job.setJarByClass(MaxTemperature.class);
 		job.setJobName("Max Temperature");
-
+		// job设定reduce进程数,如果修改为2,则返回目录的part应该为2个
+		//job.setNumReduceTasks(2);
 		// 设定这个Job的输入文件
 		FileInputFormat.addInputPath(job, new Path(args[0]));
 		// 设定这个Job的输出文件
