@@ -1,4 +1,4 @@
-package hadoop.definitive.guide.chapter002.com;
+package hadoop.definitive.guide.chapter002.weather;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;

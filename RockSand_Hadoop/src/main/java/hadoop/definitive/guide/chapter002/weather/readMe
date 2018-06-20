@@ -1,0 +1,7 @@
+# 创建目录
+hdfs dfs -mkdir -p /usr/input/
+hdfs dfs -mkdir -p /usr/output/
+
+# 写入数据
+hdfs dfs -put weather /usr/input/
+

@@ -1,4 +1,4 @@
-package hadoop.definitive.guide.chapter002.com;
+package hadoop.definitive.guide.chapter002.weather;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -19,8 +19,8 @@ public class RunJob {
 
 	public static void main(String[] args) {
 		Configuration config = new Configuration();
-		config.set("fs.defaultFS", "hdfs://node1:8020");
-		config.set("yarn.resourcemanager.hostname", "node1");
+		config.set("fs.defaultFS", "hdfs://192.168.80.152:8020");
+		config.set("yarn.resourcemanager.hostname", "192.168.80.151");
 		// config.set("mapred.jar", "C:\\Users\\Administrator\\Desktop\\wc.jar");
 		// config.set("mapreduce.input.keyvaluelinerecordreader.key.value.separator",
 		// ",");
@@ -40,9 +40,9 @@ public class RunJob {
 			job.setPartitionerClass(MyPartitioner.class);
 			job.setSortComparatorClass(MySort.class);
 			job.setGroupingComparatorClass(MyGroup.class);
-
+			// 开启3个Reduce线程
 			job.setNumReduceTasks(3);
-
+			// KeyValueTextInputFormat内部指定了输入的分隔符  分隔符为\t
 			job.setInputFormatClass(KeyValueTextInputFormat.class);
 
 			FileInputFormat.addInputPath(job, new Path("/usr/input/weather"));

@@ -1,4 +1,4 @@
-package hadoop.definitive.guide.chapter002.com;
+package hadoop.definitive.guide.chapter002.weather;
 
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.mapreduce.lib.partition.HashPartitioner;

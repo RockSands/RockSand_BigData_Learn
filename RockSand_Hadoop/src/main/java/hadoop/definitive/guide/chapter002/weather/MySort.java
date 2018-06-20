@@ -1,4 +1,4 @@
-package hadoop.definitive.guide.chapter002.com;
+package hadoop.definitive.guide.chapter002.weather;
 
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.io.WritableComparator;
@@ -15,6 +15,7 @@ public class MySort extends WritableComparator{
 		super(MyKey.class,true);
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public int compare(WritableComparable a, WritableComparable b) {
 		MyKey k1 =(MyKey) a;
 		MyKey k2 =(MyKey) b;
