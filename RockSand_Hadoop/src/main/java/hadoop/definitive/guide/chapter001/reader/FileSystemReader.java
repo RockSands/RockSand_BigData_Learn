@@ -21,6 +21,10 @@ public class FileSystemReader {
     public static void main(String[] args) {
 	String uri = args[0];
 	Configuration conf = new Configuration();
+	/*
+	 * 本地运行的配置,指定fs.defaultFS与yarn.resourcemanager.hostname.  则本地的hadoop会从远端读取
+	 * HDFS上的内容进行并发处理, 适合debug
+	 */
 	conf.set("fs.defaultFS", "hdfs://192.168.80.152:8020");
 	conf.set("yarn.resourcemanager.hostname", "192.168.80.151");
 	FileSystem fs = null;
