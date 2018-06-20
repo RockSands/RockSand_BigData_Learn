@@ -25,8 +25,8 @@ public class RunJob {
 	// config.set("mapreduce.input.keyvaluelinerecordreader.key.value.separator",
 	// ",");
 	/*
-	 * 第一次分析出朋友关系
-	 * 第二次分析出单向朋友,  双向朋友过滤掉不会推荐
+	 * 第一次分析出朋友的朋友的亲密度(出现过几次)
+	 * 第二次为按照亲密度,排序推荐朋友
 	 */
 	if (run1(config)) {
 	    run2(config);
@@ -106,6 +106,8 @@ public class RunJob {
 	    for (int i = 0; i < friends.length; i++) {
 		String f1 = friends[i];
 		Fof ofof = new Fof(user, f1);
+		// 将直接朋友关系放入,可以解决朋友的朋友 早就是朋友的问题.  
+		// 0是他们的标记, 当reduce的value发现存在0 表示他们就是朋友.不用再计算
 		context.write(ofof, new IntWritable(0));
 		for (int j = i + 1; j < friends.length; j++) {
 		    String f2 = friends[j];
