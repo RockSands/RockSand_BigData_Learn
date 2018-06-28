@@ -1,0 +1,22 @@
+特殊说明:
+	Hive使用最新的稳定版本apache-hive-2.3.3-bin.tar.  
+	目前Hive On MR官方不推荐,推荐使用SparkSQL来替代Hive的sql操作
+
+----------------------------------------------------------
+自定义UDF
+	1.打包Jar并发送到Hive服务器
+	2.测试jar包,进入hive
+hive> ADD JAR MyUDF.jar;  
+hive> list jars;
+# session级别添加,在关闭hive客户端后直接失效
+hive> CREATE TEMPORARY FUNCTION myudf as 'hive.com.sample01.udf.MyUDF';  
+hive> select myudf("1985-09-01 10:59:58","yyyy-MM-dd HH:mm:ss");  
+
+	2.正式装载Jar
+# 添加持久化方法.注意Jar指定
+hdfs dfs -mkdir -p /usr/hive/function/
+hdfs dfs -put MyUDF.jar /usr/hive/function/
+hdfs dfs -ls /usr/hive/function
+hive> CREATE FUNCTION myudf AS 'hive.com.sample01.udf.MyUDF' USING JAR 'hdfs:///usr/hive/function/MyUDF.jar'; 
+hive> select myudf("1985-09-01 10:59:58","yyyy-MM-dd HH:mm:ss");  
+
