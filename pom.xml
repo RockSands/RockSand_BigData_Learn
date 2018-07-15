@@ -17,6 +17,7 @@
 		<org.apache.mahout.version>0.13.0</org.apache.mahout.version>
 		<hadoop.version>2.7.6</hadoop.version>
 		<hive.version>2.3.3</hive.version>
+		<hbase.version>1.2.6</hbase.version>
 	</properties>
 
 	<dependencies>
@@ -35,5 +36,6 @@
 		<module>RockSand_Mahout</module>
 		<module>RockSand_LibRec</module>
 		<module>RockSand_Hive</module>
+		<module>RockSand_Hbase</module>
 	</modules>
 </project>
