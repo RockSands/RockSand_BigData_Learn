@@ -8,6 +8,7 @@ import java.util.Random;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.Cell;
+import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
@@ -25,6 +26,7 @@ import org.apache.hadoop.hbase.filter.CompareFilter;
 import org.apache.hadoop.hbase.filter.FilterList;
 import org.apache.hadoop.hbase.filter.PrefixFilter;
 import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
+import org.apache.hadoop.hbase.util.Bytes;
 
 public class HbaseMain {
 
@@ -36,14 +38,16 @@ public class HbaseMain {
 		connect();
 		create();
 		insert();
-		find();
-		find1();
-		search();
+		get();
+		// find();
+		// find1();
+		// search();
 		close();
 	}
 
 	/**
-	 * 连接 注意： 1.需要修改本机的hosts，将对应的Host添加 2.Hbase中修改/etc/hosts, 将local和127.0.0.1注释掉
+	 * 连接 注意： 1.需要修改本机的hosts，将HbaseSlaves对应的Host添加 2.Hbase中修改/etc/hosts,
+	 * 将local和127.0.0.1注释掉 ----目前不需要
 	 * 
 	 * @throws IOException
 	 */
@@ -115,6 +119,10 @@ public class HbaseMain {
 	public static void insert() throws IOException {
 		Table table = conn.getTable(test);
 		List<Put> list = new ArrayList<Put>();
+		Put me = new Put("13478229868".getBytes());
+		me.addColumn("cf1".getBytes(), "address".getBytes(), "沈阳".getBytes());
+		me.addColumn("cf1".getBytes(), "type".getBytes(), String.valueOf(ra.nextInt(2)).getBytes());
+		list.add(me);
 		for (int i = 0; i < 1000; i++) {
 			Put put = new Put(getRowKey("138").getBytes());
 			put.addColumn("cf1".getBytes(), "address".getBytes(), "北京".getBytes());
@@ -122,6 +130,22 @@ public class HbaseMain {
 			list.add(put);
 		}
 		table.put(list);
+	}
+
+	/**
+	 * Get
+	 * 
+	 * @throws IOException
+	 */
+	public static void get() throws IOException {
+		Table table = conn.getTable(test);
+		Get get = new Get(Bytes.toBytes("13478229868"));
+		Result result = table.get(get);
+		for (Cell cell : result.rawCells()) {//获取row的各个列
+			System.out.println("-列族->" + Bytes.toString(CellUtil.cloneFamily(cell)));
+			System.out.println("-列名->" + Bytes.toString(CellUtil.cloneQualifier(cell)));
+			System.out.println("-列值->" + Bytes.toString(CellUtil.cloneValue(cell)));
+		}
 	}
 
 	/**
