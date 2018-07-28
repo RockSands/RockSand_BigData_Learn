@@ -23,6 +23,7 @@ import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.filter.CompareFilter;
+import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.filter.FilterList;
 import org.apache.hadoop.hbase.filter.PrefixFilter;
 import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
@@ -38,7 +39,8 @@ public class HbaseMain {
 		connect();
 		create();
 		insert();
-		get();
+		scanALL();
+		scanFilter();
 		// find();
 		// find1();
 		// search();
@@ -98,6 +100,7 @@ public class HbaseMain {
 		hc.setBlocksize(1800000);
 		ht.addFamily(hc);
 		admin.createTable(ht);
+		admin.close();
 	}
 
 	/**
@@ -106,9 +109,9 @@ public class HbaseMain {
 	 * @param pre
 	 * @return
 	 */
-	public static String getRowKey(String pre) {
-		return pre + ra.nextInt(99999999) + "_2016" + ra.nextInt(12) + ra.nextInt(30) + ra.nextInt(24) + ra.nextInt(60)
-				+ ra.nextInt(60);
+	public static String getRowKey() {
+		int val = ra.nextInt(99999999);
+		return (val % 2 == 1 ? "134" : "138") + ra.nextInt(99999999);
 	}
 
 	/**
@@ -123,13 +126,14 @@ public class HbaseMain {
 		me.addColumn("cf1".getBytes(), "address".getBytes(), "沈阳".getBytes());
 		me.addColumn("cf1".getBytes(), "type".getBytes(), String.valueOf(ra.nextInt(2)).getBytes());
 		list.add(me);
-		for (int i = 0; i < 1000; i++) {
-			Put put = new Put(getRowKey("138").getBytes());
+		for (int i = 0; i < 200; i++) {
+			Put put = new Put(getRowKey().getBytes());
 			put.addColumn("cf1".getBytes(), "address".getBytes(), "北京".getBytes());
 			put.addColumn("cf1".getBytes(), "type".getBytes(), String.valueOf(ra.nextInt(2)).getBytes());
 			list.add(put);
 		}
 		table.put(list);
+		table.close();
 	}
 
 	/**
@@ -141,11 +145,66 @@ public class HbaseMain {
 		Table table = conn.getTable(test);
 		Get get = new Get(Bytes.toBytes("13478229868"));
 		Result result = table.get(get);
-		for (Cell cell : result.rawCells()) {//获取row的各个列
+		for (Cell cell : result.rawCells()) {// 获取row的各个列
 			System.out.println("-列族->" + Bytes.toString(CellUtil.cloneFamily(cell)));
 			System.out.println("-列名->" + Bytes.toString(CellUtil.cloneQualifier(cell)));
 			System.out.println("-列值->" + Bytes.toString(CellUtil.cloneValue(cell)));
 		}
+		table.close();
+	}
+
+	/**
+	 * 获取所有
+	 * 
+	 * @throws IOException
+	 */
+	public static void scanALL() throws IOException {
+		Table table = conn.getTable(test);
+		Scan scan = new Scan();
+		ResultScanner scanner = table.getScanner(scan);
+		Iterator<Result> it = scanner.iterator();
+		System.out.println("<-----------------ScanALl------------->");
+		while (it.hasNext()) {
+			Result next = it.next();
+			// byte[] value = next.getValue("cf1".getBytes(), "type".getBytes());
+			System.out.print("ROWKEY[" + Bytes.toString(next.getRow()) + "]");
+			for (Cell cell : next.rawCells()) {// 获取row的各个列
+				System.out.print("\t" + Bytes.toString(CellUtil.cloneFamily(cell)));
+				System.out.print("." + Bytes.toString(CellUtil.cloneQualifier(cell)));
+				System.out.print(": " + Bytes.toString(CellUtil.cloneValue(cell)));
+			}
+			System.out.println();
+		}
+		table.close();
+	}
+
+	/**
+	 * scanFilter
+	 * 
+	 * Filter对列进行过滤,但是Hbase对Rowkey查询性能高,Filter性能有的较差
+	 * @throws IOException
+	 */
+	public static void scanFilter() throws IOException {
+		Table table = conn.getTable(test);
+		Scan scan = new Scan();
+		// 筛选匹配行键的前缀成功的行
+		Filter filter = new PrefixFilter(Bytes.toBytes("134"));
+		scan.setFilter(filter);
+		ResultScanner scanner = table.getScanner(scan);
+		Iterator<Result> it = scanner.iterator();
+		System.out.println("<-----------------scanFilter------------->");
+		while (it.hasNext()) {
+			Result next = it.next();
+			// byte[] value = next.getValue("cf1".getBytes(), "type".getBytes());
+			System.out.print("ROWKEY[" + Bytes.toString(next.getRow()) + "]");
+			for (Cell cell : next.rawCells()) {// 获取row的各个列
+				System.out.print("\t" + Bytes.toString(CellUtil.cloneFamily(cell)));
+				System.out.print("." + Bytes.toString(CellUtil.cloneQualifier(cell)));
+				System.out.print(": " + Bytes.toString(CellUtil.cloneValue(cell)));
+			}
+			System.out.println();
+		}
+		table.close();
 	}
 
 	/**
