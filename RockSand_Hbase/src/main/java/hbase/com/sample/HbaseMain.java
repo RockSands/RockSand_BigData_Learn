@@ -163,6 +163,13 @@ public class HbaseMain {
 		Scan scan = new Scan();
 		ResultScanner scanner = table.getScanner(scan);
 		Iterator<Result> it = scanner.iterator();
+		/*
+		 * 缓存
+		 * setCacheBlocks,设置缓存到Region的Cache中
+		 * setCaching,设置每次获取的列数(按照批次)
+		 */
+//		scan.setCacheBlocks(cacheBlocks);
+//		scan.setCaching(caching);
 		System.out.println("<-----------------ScanALl------------->");
 		while (it.hasNext()) {
 			Result next = it.next();
