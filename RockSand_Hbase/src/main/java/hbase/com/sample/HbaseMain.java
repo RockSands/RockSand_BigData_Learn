@@ -58,8 +58,10 @@ public class HbaseMain {
 		System.getProperties().setProperty("HADOOP_USER_NAME", "hadoop");
 		System.getProperties().setProperty("HADOOP_HOME", "E:\\Java\\Hadoop\\hadoop-2.7.6");
 		Configuration conf = HBaseConfiguration.create();
+		// rootdir可以使用IP,但是一旦IP所属机器失效,则无法访问,这里应该使用hadoop定义的nameSpace
 		conf.set("hbase.rootdir", "hdfs://192.168.80.152:8020/hbase");
 		conf.set("hbase.zookeeper.property.clientPort", "2181");
+		// 核心HBase是zookeeper保存regionServer以及region信息,所以只需要zookeeper就能访问到信息
 		conf.set("hbase.zookeeper.quorum", "hadoop-3,hadoop-4,hadoop-5");
 		conf.setInt("hbase.rpc.timeout", 20000);
 		conf.setInt("hbase.client.operation.timeout", 30000);
@@ -94,7 +96,7 @@ public class HbaseMain {
 		HTableDescriptor ht = new HTableDescriptor(test);
 		// 列族
 		HColumnDescriptor hc = new HColumnDescriptor("cf1".getBytes());
-		// 最多保存5个版本
+		// 最多保存5个版本,如果只需要最新的,版本设置为1即可
 		hc.setMaxVersions(5);
 		hc.setBlockCacheEnabled(true);
 		hc.setBlocksize(1800000);
@@ -115,6 +117,18 @@ public class HbaseMain {
 	}
 
 	/**
+	 * RowKey
+	 * 
+	 * @param pre
+	 * @return
+	 */
+	public static String getTime() {
+		int val = ra.nextInt(99999999);
+		return (val % 2 == 1 ? "20180802 " : "20180801 ") + ra.nextInt(23) + ":" + ra.nextInt(59) + ":"
+				+ ra.nextInt(59);
+	}
+
+	/**
 	 * 插入
 	 * 
 	 * @throws IOException
@@ -124,11 +138,13 @@ public class HbaseMain {
 		List<Put> list = new ArrayList<Put>();
 		Put me = new Put("13478229868".getBytes());
 		me.addColumn("cf1".getBytes(), "address".getBytes(), "沈阳".getBytes());
+		me.addColumn("cf1".getBytes(), "time".getBytes(), getTime().getBytes());
 		me.addColumn("cf1".getBytes(), "type".getBytes(), String.valueOf(ra.nextInt(2)).getBytes());
 		list.add(me);
-		for (int i = 0; i < 200; i++) {
+		for (int i = 0; i < 500; i++) {
 			Put put = new Put(getRowKey().getBytes());
 			put.addColumn("cf1".getBytes(), "address".getBytes(), "北京".getBytes());
+			put.addColumn("cf1".getBytes(), "time".getBytes(), getTime().getBytes());
 			put.addColumn("cf1".getBytes(), "type".getBytes(), String.valueOf(ra.nextInt(2)).getBytes());
 			list.add(put);
 		}
@@ -164,12 +180,10 @@ public class HbaseMain {
 		ResultScanner scanner = table.getScanner(scan);
 		Iterator<Result> it = scanner.iterator();
 		/*
-		 * 缓存
-		 * setCacheBlocks,设置缓存到Region的Cache中
-		 * setCaching,设置每次获取的列数(按照批次)
+		 * 缓存 setCacheBlocks,设置缓存到Region的Cache中 setCaching,设置每次获取的列数(按照批次)
 		 */
-//		scan.setCacheBlocks(cacheBlocks);
-//		scan.setCaching(caching);
+		// scan.setCacheBlocks(cacheBlocks);
+		// scan.setCaching(caching);
 		System.out.println("<-----------------ScanALl------------->");
 		while (it.hasNext()) {
 			Result next = it.next();
@@ -189,6 +203,7 @@ public class HbaseMain {
 	 * scanFilter
 	 * 
 	 * Filter对列进行过滤,但是Hbase对Rowkey查询性能高,Filter性能有的较差
+	 * 
 	 * @throws IOException
 	 */
 	public static void scanFilter() throws IOException {
@@ -239,8 +254,9 @@ public class HbaseMain {
 	public static void find1() throws IOException {
 		Table table = conn.getTable(test);
 		Scan scan = new Scan();
+		// FilterList可以实现复杂的过滤逻辑
 		FilterList fl = new FilterList(FilterList.Operator.MUST_PASS_ALL);
-		PrefixFilter pf = new PrefixFilter("1389".getBytes());
+		PrefixFilter pf = new PrefixFilter("138".getBytes());
 		SingleColumnValueFilter sf = new SingleColumnValueFilter("cf1".getBytes(), "type".getBytes(),
 				CompareFilter.CompareOp.EQUAL, "1".getBytes());
 		// 过滤器的顺序影响效率

@@ -9,8 +9,6 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 
-import hbase.com.hdfs.driver.ReducerClass;
-
 /**
  * Created by root on 2016/3/5 0005.
  */

@@ -1,4 +1,4 @@
-package hbase.com.hdfs.driver;
+package hbase.com.hdfs;
 
 import java.io.IOException;
 import org.apache.hadoop.io.LongWritable;

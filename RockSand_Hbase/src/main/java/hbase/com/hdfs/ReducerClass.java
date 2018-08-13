@@ -1,4 +1,4 @@
-package hbase.com.hdfs.driver;
+package hbase.com.hdfs;
 
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
