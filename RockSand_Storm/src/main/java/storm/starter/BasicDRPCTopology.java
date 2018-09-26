@@ -30,49 +30,56 @@ import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 
 /**
- * This topology is a basic example of doing distributed RPC on top of Storm. It implements a function that appends a
- * "!" to any string you send the DRPC function.
+ * This topology is a basic example of doing distributed RPC on top of Storm. It
+ * implements a function that appends a "!" to any string you send the DRPC
+ * function.
+ * 
+ * 该拓扑实现了在分布式Storm上处理RPC的方式, 他会为每条RPC的语句后面增加"!"
  * <p/>
- * See https://github.com/nathanmarz/storm/wiki/Distributed-RPC for more information on doing distributed RPC on top of
- * Storm.
+ * See https://github.com/nathanmarz/storm/wiki/Distributed-RPC for more
+ * information on doing distributed RPC on top of Storm.
  */
 public class BasicDRPCTopology {
-  public static class ExclaimBolt extends BaseBasicBolt {
-    @Override
-    public void execute(Tuple tuple, BasicOutputCollector collector) {
-      String input = tuple.getString(1);
-      collector.emit(new Values(tuple.getValue(0), input + "!"));
-    }
 
-    @Override
-    public void declareOutputFields(OutputFieldsDeclarer declarer) {
-      declarer.declare(new Fields("id", "result"));
-    }
+	public static class ExclaimBolt extends BaseBasicBolt {
+		@Override
+		public void execute(Tuple tuple, BasicOutputCollector collector) {
+			String input = tuple.getString(1);
+			collector.emit(new Values(tuple.getValue(0), input + "!"));
+		}
 
-  }
+		/* 
+		 * 该方法定义了emit的输出格式,一旦输出不符合格式会报异常
+		 * 此处为输出的一个记录(Values)有2个属性(Field)属性名称分别为(id和result)
+		 */
+		@Override
+		public void declareOutputFields(OutputFieldsDeclarer declarer) {
+			declarer.declare(new Fields("id", "result"));
+		}
 
-  public static void main(String[] args) throws Exception {
-    LinearDRPCTopologyBuilder builder = new LinearDRPCTopologyBuilder("exclamation");
-    builder.addBolt(new ExclaimBolt(), 3);
+	}
 
-    Config conf = new Config();
+	public static void main(String[] args) throws Exception {
+		LinearDRPCTopologyBuilder builder = new LinearDRPCTopologyBuilder("exclamation");
+		builder.addBolt(new ExclaimBolt(), 3); // 3个Excuter执行该Bolt,  即3个进程并发实现
 
-    if (args == null || args.length == 0) {
-      LocalDRPC drpc = new LocalDRPC();
-      LocalCluster cluster = new LocalCluster();
+		Config conf = new Config();
 
-      cluster.submitTopology("drpc-demo", conf, builder.createLocalTopology(drpc));
+		if (args == null || args.length == 0) {
+			LocalDRPC drpc = new LocalDRPC();
+			LocalCluster cluster = new LocalCluster();
 
-      for (String word : new String[]{ "hello", "goodbye" }) {
-        System.out.println("Result for \"" + word + "\": " + drpc.execute("exclamation", word));
-      }
+			cluster.submitTopology("drpc-demo", conf, builder.createLocalTopology(drpc));
 
-      cluster.shutdown();
-      drpc.shutdown();
-    }
-    else {
-      conf.setNumWorkers(3);
-      StormSubmitter.submitTopologyWithProgressBar(args[0], conf, builder.createRemoteTopology());
-    }
-  }
+			for (String word : new String[] { "hello", "goodbye" }) {
+				System.out.println("Result for \"" + word + "\": " + drpc.execute("exclamation", word));
+			}
+
+			cluster.shutdown();
+			drpc.shutdown();
+		} else {
+			conf.setNumWorkers(3);// 由3个work执行该拓扑
+			StormSubmitter.submitTopologyWithProgressBar(args[0], conf, builder.createRemoteTopology());
+		}
+	}
 }
