@@ -37,5 +37,6 @@
 		<module>RockSand_LibRec</module>
 		<module>RockSand_Hive</module>
 		<module>RockSand_Hbase</module>
+		<module>RockSand_Zookeeper</module>
 	</modules>
 </project>
